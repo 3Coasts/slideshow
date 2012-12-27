@@ -1,0 +1,30 @@
+<?php
+function slideshow_schema() {
+
+  $schema['slideshow'] = array (
+    'description' => 'The main store for our entity',
+    'fields' => array(
+      'sid' => array(
+        'description' => 'Primary key for our slides',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'Title',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp of the entity creation time.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('sid'),
+  );
+
+  return $schema;
+}

@@ -1,0 +1,166 @@
+<?php
+
+module_load_include('inc', 'slideshow', 'includes/slideshow.entity');
+
+/**
+ * Implements hook_menu().
+ */
+function slideshow_menu() {
+
+	$items = array();
+
+	$items['admin/structure/slideshow/manage'] = array(
+		'title' => 'Slideshow',
+		'description' => 'Manage Slideshow Entities Structure',
+		'page callback' => 'slideshow_admin_page',
+		'file' => 'includes/slideshow.admin.inc',
+		'access arguments' => array('administer slideshow entities'),
+	);
+
+	$items['slideshow/add'] = array(
+		'title' => 'Add a slideshow Entity',
+		'page callback' => 'slideshow_add',
+		'access arguments' => array('create slideshow entities'),
+		'file' => 'includes/slideshow.add.inc',
+	);
+
+  $items['slideshow/%slideshow/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('slideshow_edit_form', 1),
+    'access arguments' => array('edit slideshow entities'),
+    'file' => 'includes/slideshow.edit.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+
+}
+
+/**
+ * Implements hook_permission()
+ */
+function slideshow_permission() {
+    return array(
+    'administer slideshow entities' =>  array(
+      'title' => t('Administer slideshow Entities'),
+      'restrict access' => TRUE,
+    ),
+    'view slideshow entities' => array(
+      'title' => t('View slideshow Entities'),
+    ),
+    'edit slideshow entities' => array(
+      'title' => t('Edit slideshow Entities'),
+    ),
+    'create slideshow entities' => array(
+      'title' => t('Create slideshow Entities'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_requirements().
+ */
+function slideshow_requirements($phase) {
+  // Create an array to hold Nivo Slider requirements
+  $requirements = array();
+
+  // Check requirements during the runtime phase
+  if ($phase == 'runtime') {
+    // Check if the Nivo Slider jQuery plugin library is installed
+    if (($library = libraries_detect('nivo-slider')) && !empty($library['installed'])) {
+      $requirements['nivo_slider_library'] = array(
+        'title' => t('Nivo Slider jQuery plugin'),
+        'value' => t('Installed'),
+        'severity' => REQUIREMENT_OK,
+      );
+    }
+    else {
+      $requirements['nivo_slider_library'] = array(
+        'title' => t('Nivo Slider jQuery plugin'),
+        'value' => t('Not installed'),
+        'description' => $library['error message'],
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+
+function slideshow_libraries_info(){
+
+  $libraries = array();
+
+  $libraries['nivo-slider'] = array(
+    'name' => 'Nivo Slider',
+    'vendor url' => 'http://nivo.dev7studios.com',
+    'download url' => 'http://nivo.dev7studios.com/pricing',
+    'version arguments' => array(
+      'file' => 'jquery.nivo.slider.pack.js',
+      // 3.x: jQuery Nivo Slider v3.1
+      'pattern' => '/jQuery Nivo Slider v(\d+\.+\d+)/',
+      'lines' => 2,
+    ),
+    'files' => array(
+      'js' => array(
+        'jquery.nivo.slider.pack.js',
+      ),
+      'css' => array(
+        'nivo-slider.css',
+      ),
+    ),
+  );
+
+  return $libraries;
+
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function slideshow_block_info() {
+  $blocks['slideshow'] = array(
+    'info' => t('Slideshow Block'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function slideshow_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'slideshow':
+      $block['content'] = array(
+        '#markup' => theme('item_list', array('items' => slideshow_load_all())),
+        '#attached' => array(
+          'libraries_load' => array(array('nivo-slider')),
+          'js' => array(drupal_get_path('module', 'slideshow') . '/slideshow.js'),
+        ),
+      );
+      break;
+  }
+  return $block;
+}
+
+
+function slideshow_load_all(){
+	$result = db_select('slideshow','s')
+			->fields('s')
+			->execute();
+	$slides = array();
+	while($row = $result->fetchAssoc()) {
+		$slide = slideshow_load($row['sid']);
+		$slide = slideshow_view($slide);
+    $slides[] = render($slide);
+	}
+	return $slides;
+
+}
