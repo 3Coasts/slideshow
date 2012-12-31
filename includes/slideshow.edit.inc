@@ -56,7 +56,7 @@ function slideshow_edit_form_submit($form, &$form_state) {
 
 function slideshow_edit_delete($form , &$form_state) {
   $slideshow = $form_state['values']['slideshow'];
-  slideshow_delete($slideshow);
+  slideshow_delete($slideshow->sid);
   drupal_set_message(t('The slideshow %title (ID %id) has been deleted',
     array('%title' => $slideshow->title, '%id' => $slideshow->sid))
   );

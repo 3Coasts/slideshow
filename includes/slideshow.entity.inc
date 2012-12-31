@@ -130,21 +130,24 @@ class slideshowController extends DrupalDefaultEntityController{
     return $slideshow;
   }
 
-  public function delete($slideshow) {
-    $this->delete_multiple(array($slideshow));
+  public function delete($sid) {
+    $this->delete_multiple(array($sid));
   }
 
-  public function delete_multiple($slideshows) {
-    $sids = array();
-    if (!empty($slideshows)) {
-      $transaction = db_transaction();
+  public function delete_multiple($sids) {
+    $transaction = db_transaction();
+    if (!empty($sids)) {
+      $slideshows = slideshow_load_multiple($sids);
+
       try {
-        foreach ($slideshows as $slideshow) {
-          // Invoke hook_entity_delete().
-          module_invoke_all('slideshow_delete', $slideshow, 'slideshow');
+        foreach ($slideshows as $sid => $slideshow) {
+
+          module_invoke_all('slideshow_delete', $slideshow);
+          module_invoke_all('entity_delete', $slideshow, 'slideshow');
           field_attach_delete('slideshow', $slideshow);
-          $sids[] = $slideshow->sid;
+
         }
+
         db_delete('slideshow')
           ->condition('sid', $sids, 'IN')
           ->execute();
@@ -154,7 +157,10 @@ class slideshowController extends DrupalDefaultEntityController{
         watchdog_exception('slideshow', $e);
         throw $e;
       }
+
+      entity_get_controller('slideshow')->resetCache();
     }
+
   }
 
 }
