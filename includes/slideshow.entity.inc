@@ -122,6 +122,7 @@ class slideshowController extends DrupalDefaultEntityController{
       field_attach_insert('slideshow', $slideshow);
       module_invoke_all('entity_insert', 'slideshow', $slideshow);
     }else{
+      $slideshow->original = isset($slideshow->original) ? $slideshow->original : NULL;
       drupal_write_record('slideshow', $slideshow, 'sid');
       field_attach_update('slideshow', $slideshow);
       module_invoke_all('entity_update', 'slideshow', $slideshow);
