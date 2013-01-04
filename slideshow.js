@@ -42,11 +42,14 @@ jQuery.fn.gallerify = function() {
       var max = $(items).length -1;
 
       autotoggle('on');
-      $(obj).parents(".block").hover(function(){ autotoggle('off'); }, function(){ autotoggle('on'); });
+      $(obj).parents(".block").hover(function(){ 
+        autotoggle('off'); 
+      }, function(){ 
+        autotoggle('on'); 
+      });
 
       function autotoggle(state){
         if(state == 'on'){
-          console.log('go');
           clearInterval(auto);
           auto = setInterval(function(){
             if(current < max){ current++; }else{ current=0; }
@@ -54,7 +57,6 @@ jQuery.fn.gallerify = function() {
           },5000);
         }else{
           clearInterval(auto);
-          console.log('stop');
         }
       }
 
