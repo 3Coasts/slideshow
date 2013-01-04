@@ -2,9 +2,9 @@
 
 
 Drupal.behaviors.slideshow = {
-	attach: function (context, settings) {
-		$("#slideshow").gallerify();
-	}
+  attach: function (context, settings) {
+    $("#slideshow").gallerify();
+  }
 }
 
 
@@ -17,10 +17,6 @@ jQuery.fn.gallerify = function() {
       var ratio;
 
       items.css({ 'display':'none' });
-
-      items.find("img").parent().css({
-        'float':'left',
-      });
 
       $(items[0]).css({ 'display':'block' });
 
