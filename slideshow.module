@@ -84,6 +84,7 @@ function slideshow_block_view($delta = '') {
         '#markup' => theme('item_list', array('items' => slideshow_load_all(),'attributes' => array('id' => 'slideshow'))),
         '#attached' => array(
           'js' => array(drupal_get_path('module', 'slideshow') . '/slideshow.js'),
+          'css' => array(drupal_get_path('module', 'slideshow') . '/slideshow.css.less'),
         ),
       );
       break;
