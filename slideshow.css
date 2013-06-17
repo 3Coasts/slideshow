@@ -1,0 +1,26 @@
+#block-slideshow-slideshow {
+  position: relative; }
+  #block-slideshow-slideshow ul#slideshow {
+    margin: 0;
+    position: relative;
+    width: 100%;
+    float: left; }
+    #block-slideshow-slideshow ul#slideshow li {
+      width: 100%;
+      float: left;
+      margin-right: -100%; }
+      #block-slideshow-slideshow ul#slideshow li img {
+        max-width: 100%; }
+  #block-slideshow-slideshow div.gallery_changer {
+    position: absolute;
+    z-index: 10;
+    top: 0px;
+    left: 0px; }
+    #block-slideshow-slideshow div.gallery_changer ul {
+      margin: 0; }
+      #block-slideshow-slideshow div.gallery_changer ul li {
+        float: left; }
+        #block-slideshow-slideshow div.gallery_changer ul li a {
+          display: block; }
+        #block-slideshow-slideshow div.gallery_changer ul li.current a {
+          text-decoration: underline; }

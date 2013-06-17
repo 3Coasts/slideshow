@@ -1,0 +1,26 @@
+#block-slideshow-slideshow
+	position: relative
+	ul#slideshow
+		margin: 0
+		position: relative
+		width: 100%
+		float: left
+		li
+			width: 100%
+			float: left
+			margin-right: -100%
+			img
+				max-width: 100%
+	div.gallery_changer
+		position: absolute
+		z-index: 10
+		top: 0px
+		left: 0px
+		ul
+			margin: 0
+			li
+				float: left
+				a
+					display: block
+				&.current a
+					text-decoration: underline
