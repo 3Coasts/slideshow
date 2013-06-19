@@ -21,6 +21,4 @@
       #block-slideshow-slideshow div.gallery_changer ul li {
         float: left; }
         #block-slideshow-slideshow div.gallery_changer ul li a {
-          display: block; }
-        #block-slideshow-slideshow div.gallery_changer ul li.current a {
-          text-decoration: underline; }
+          display: table; }
